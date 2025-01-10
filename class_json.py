@@ -6,7 +6,6 @@
 #                 'a' will append new text data
 #
 
-
 import json
 
 class Initialize_JSON:
