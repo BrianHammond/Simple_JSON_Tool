@@ -12,15 +12,12 @@ import json
 class Initialize_JSON:
     def initialize_json(self):
         json_string = '{"employees":[]}'
-
         data = json.loads(json_string)
-
         with open("files/data.json", "w") as file: # this will write the txt_data and create a new file, or overwrite the txt_data if file already available 
             json.dump(data, file, indent=4) # json.dump converts the dictionary into a json string, 'file' as the second argument and indent to create indentations
             print(f"json file was created")
 
 class JSON:
-
     def __init__(self):
 
         self.name = input("Enter employee name: ")
@@ -35,6 +32,7 @@ class JSON:
                             "misc": [self.misc]
                         }
 
+class Appending(JSON):
     def appending(self):
         with open("files/data.json", "r+") as file:
             file_content = json.load(file)

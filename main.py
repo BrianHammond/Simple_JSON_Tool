@@ -34,7 +34,7 @@ while True:
                 if os.path.exists("files/data.json") == False: # checks to see if the file is there (returns a bool)
                     print(f"data.json not found, please Initialize")
                 elif os.path.exists("files/data.json") == True:
-                    JSON().appending()
+                    Appending().appending()
             except ValueError:
                 print("Please check the values you entered, age can only accept numbers")
         case 3:
