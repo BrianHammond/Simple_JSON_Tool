@@ -24,21 +24,28 @@ while True:
         case 0:
             break
         case 1:
-            if os.path.exists("files/data.json") == False: # checks to see if the file is there (returns a bool)
+            if not os.path.isdir(Files().folder):
+                print(f"{Files().folder} not found, creating folder")
+                os.makedirs(Files().folder)
+
+            if not os.path.exists(Files().full_path): # checks to see if the file is there (returns a bool)
                 print(f"data.json not found, creating a new one")
                 Initialize_JSON().initialize_json()
-            elif os.path.exists("files/data.json") == True:
+            elif os.path.exists(Files().full_path):
                 print(f"JSON already initialized")
         case 2:
             try:
-                if os.path.exists("files/data.json") == False: # checks to see if the file is there (returns a bool)
+                if not os.path.exists(Files().full_path): # checks to see if the file is there (returns a bool)
                     print(f"data.json not found, please Initialize")
-                elif os.path.exists("files/data.json") == True:
+                elif os.path.exists(Files().full_path):
                     Appending().appending()
             except ValueError:
                 print("Please check the values you entered, age can only accept numbers")
         case 3:
-            print("I haven't gotten to this point yet")
+            if not os.path.exists(Files().full_path):
+                print(".json doesn't exist, please check or initialize a new one")
+            elif os.path.exists(Files().full_path):
+                Reading().reading()
         case _:
             print("enter a valid number")
 print("GOOD BYE")
