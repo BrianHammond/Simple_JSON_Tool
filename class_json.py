@@ -6,19 +6,20 @@
 #                 'a' will append new text data
 #
 
+import os
 import json
 
-class Files:
-    def __init__(self):
-        self.folder = "files"
-        self.file = "data.json"
-        self.full_path = self.folder + "/" + self.file
+class Misc:
+    def __init__(self, folder, file, full_path):
+        self.folder = folder
+        self.file = file
+        self.full_path = full_path
 
-class Initialize_JSON():
+class Initialize_JSON(Misc):
     def initialize_json(self):
         json_string = '{"Employees":[]}'
         data = json.loads(json_string)
-        with open(Files().full_path, "w") as file: # this will write the txt_data and create a new file, or overwrite the txt_data if file already available 
+        with open(self.full_path, "w") as file: # this will write the txt_data and create a new file, or overwrite the txt_data if file already available 
             json.dump(data, file, indent=4) # json.dump converts the dictionary into a json string, 'file' as the second argument and indent to create indentations
 
 class JSON:
@@ -43,17 +44,17 @@ class JSON:
                             ]
                         }
 
-class Appending():
+class Appending(Misc):
     def appending(self):
-        with open(Files().full_path, "r+") as file:
+        with open(self.full_path, "r+") as file:
             file_content = json.load(file)
             file_content["Employees"].append(JSON().employee)
             file.seek(0)
             json.dump(file_content, file, indent=4)
 
-class Viewing():
+class Viewing(Misc):
     def viewing(self):
-        with open(Files().full_path) as file:
+        with open(self.full_path) as file:
             data = json.load(file)
             e = 1
             for employee in data['Employees']:
