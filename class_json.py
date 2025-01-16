@@ -6,7 +6,6 @@
 #                 'a' will append new text data
 #
 
-import os
 import json
 
 class Misc:

@@ -45,18 +45,18 @@ while True:
                 print("Please check the values you entered, age can only accept numbers")
                 
         case 2:
-            if not os.path.exists(full_path): # checks to see if the file is there (returns a bool)
+            if os.path.exists(full_path): # checks to see if the file is there (returns a bool)
+                try:    
+                    Appending(folder, file, full_path).appending()
+                except ValueError:
+                    print("Please check the values you entered, age can only accept numbers")
+            else:
                 print(f"{full_path} not found, please Initialize")
- 
-            try:    
-                Appending(folder, file, full_path).appending()
-            except ValueError:
-                print("Please check the values you entered, age can only accept numbers")
-        
+
         case 3:
             if not os.path.exists(full_path):
-                print(f"{full_path} doesn't exist, please check or initialize a new one")
-            elif os.path.exists(full_path):
+                print(f"{full_path} doesn't exist, please check or write a new one")
+            else:
                 Viewing(folder, file, full_path).viewing()
         case _:
             print("enter a valid number")
