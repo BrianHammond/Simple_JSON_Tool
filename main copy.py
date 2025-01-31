@@ -57,19 +57,28 @@ class UI(QMainWindow):
         try:
             with open(self.filename[0], "r+") as file: # this will write the txt_data and create a new file, or overwrite the txt_data if file already available 
                 data = json.load(file)
-                row = 0
-                self.current_date = datetime.datetime.now().strftime("%m%d%Y%H%M%S")
-                timestamp = self.current_date
-
+                entry = 0
                 for employee in data['Employees']:
-                    name = employee['Name']
-                    age = employee['Age']
-                    title = employee['Title']
-                    address1 = employee['Address']['Address 1']
-                    address2 = employee['Address']['Address 2']
-                    additional = employee['Misc'][0]
 
-                    self.populate_table(row, timestamp, name, age, title, address1, address2, additional)
+                    self.table.insertRow(entry)
+                    self.table.setItem(entry, 0, QTableWidgetItem(employee['Timestamp']))
+                    self.table.setItem(entry, 1, QTableWidgetItem(employee['Name']))
+                    self.table.setItem(entry, 2, QTableWidgetItem(employee['Age']))
+                    self.table.setItem(entry, 3, QTableWidgetItem(employee['Title']))
+                    self.table.setItem(entry, 4, QTableWidgetItem(employee['Address']['Address 1']))
+                    self.table.setItem(entry, 5, QTableWidgetItem(employee['Address']['Address 2']))
+                    self.table.setItem(entry, 6, QTableWidgetItem(employee['Misc'][0]))
+
+                    print("")
+                    print(f"Entry Number {entry}")
+                    print(f"Timestamp: {employee['Timestamp']}")
+                    print(f"Name: {employee['Name']}")
+                    print(f"Age: {employee['Age']}")
+                    print(f"Title: {employee['Title']}")
+                    print(f"Address 1: {employee['Address']['Address 1']}")
+                    print(f"Address 2: {employee['Address']['Address 2']}")
+                    print(f"Misc: {employee['Misc'][0]}")
+                    entry += 1
         
         except FileNotFoundError:
             pass
@@ -78,29 +87,29 @@ class UI(QMainWindow):
 
     def submit_file(self):
         self.current_date = datetime.datetime.now().strftime("%m%d%Y%H%M%S")
-        timestamp = self.current_date
-        name = self.name_edit.text()
-        age = self.age_edit.text()
-        title = self.title_edit.text()
-        address1 = self.address1_edit.text()
-        address2 = self.address2_edit.text()
-        additional = self.additional_edit.text()
+        self.timestamp = self.current_date
+        self.name = self.name_edit.text()
+        self.age = self.age_edit.text()
+        self.title = self.title_edit.text()
+        self.address1 = self.address1_edit.text()
+        self.address2 = self.address2_edit.text()
+        self.additional = self.additional_edit.text()
 
         row = self.table.rowCount()
-
-        self.populate_table(row, timestamp, name, age, title, address1, address2, additional)
+        self.populate_table(row)
         
+
         self.employee = {
-                            "Timestamp": timestamp,
-                            "Name": name, 
-                            "Age": age, 
-                            "Title": title, 
+                            "Timestamp": self.timestamp,
+                            "Name": self.name, 
+                            "Age": self.age, 
+                            "Title": self.title, 
                             "Address": {
-                                        "Address 1": address1, 
-                                        "Address 2": address2
+                                        "Address 1": self.address1, 
+                                        "Address 2": self.address2
                             },
                             "Misc":[
-                                 additional
+                                 self.additional
                             ]
                         }
         
@@ -123,15 +132,15 @@ class UI(QMainWindow):
         self.address2_edit.clear()
         self.additional_edit.clear()
     
-    def populate_table(self, row, timestamp, name, age, title, address1, address2, additional):
+    def populate_table(self, row):
         self.table.insertRow(row)
-        self.table.setItem(row, 0, QTableWidgetItem(timestamp))
-        self.table.setItem(row, 1, QTableWidgetItem(name))
-        self.table.setItem(row, 2, QTableWidgetItem(age))
-        self.table.setItem(row, 3, QTableWidgetItem(title))
-        self.table.setItem(row, 4, QTableWidgetItem(address1))
-        self.table.setItem(row, 5, QTableWidgetItem(address2))
-        self.table.setItem(row, 6, QTableWidgetItem(additional))
+        self.table.setItem(row, 0, QTableWidgetItem(self.timestamp))
+        self.table.setItem(row, 1, QTableWidgetItem(self.name))
+        self.table.setItem(row, 2, QTableWidgetItem(self.age))
+        self.table.setItem(row, 3, QTableWidgetItem(self.title))
+        self.table.setItem(row, 4, QTableWidgetItem(self.address1))
+        self.table.setItem(row, 5, QTableWidgetItem(self.address2))
+        self.table.setItem(row, 6, QTableWidgetItem(self.additional))
 
 # Show/Run app
 if __name__ == "__main__":
