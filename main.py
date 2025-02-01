@@ -28,6 +28,14 @@ class UI(QMainWindow):
         #menu bar
         self.actionAbout.triggered.connect(self.about)
 
+        #text fields
+        self.name = self.name_edit
+        self.age = self.age_edit
+        self.title = self.title_edit
+        self.address1 = self.address1_edit
+        self.address2 = self.address2_edit
+        self.additional = self.additional_edit
+
     def about(self):
         self.window = QMainWindow()
         uic.loadUi("about.ui", self.window) #load the UI file
@@ -35,7 +43,7 @@ class UI(QMainWindow):
 
     def create_file(self):
         self.table.setRowCount(0)
-        self.clear_all()
+        self.clear_fields()
         self.filename = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.json)',)
         self.setWindowTitle(self.filename[0].split('/')[-1])
 
@@ -50,7 +58,7 @@ class UI(QMainWindow):
 
     def select_file(self):
         self.table.setRowCount(0)
-        self.clear_all()
+        self.clear_fields()
         self.filename = QFileDialog.getOpenFileName(self, 'create a new file', '', 'Data File (*.json)',)
         self.setWindowTitle(self.filename[0].split('/')[-1])
 
@@ -79,12 +87,12 @@ class UI(QMainWindow):
     def submit_file(self):
         self.current_date = datetime.datetime.now().strftime("%m%d%Y%H%M%S")
         timestamp = self.current_date
-        name = self.name_edit.text()
-        age = self.age_edit.text()
-        title = self.title_edit.text()
-        address1 = self.address1_edit.text()
-        address2 = self.address2_edit.text()
-        additional = self.additional_edit.text()
+        name = self.name.text()
+        age = self.age.text()
+        title = self.title.text()
+        address1 = self.address1.text()
+        address2 = self.address2.text()
+        additional = self.additional.text()
 
         row = self.table.rowCount()
 
@@ -111,17 +119,19 @@ class UI(QMainWindow):
                 file.seek(0)
                 json.dump(file_content, file, indent=4)
         except AttributeError:
+            self.clear_fields()
+            self.table.setRowCount(0)
             QMessageBox.warning(self, "NO FILE TO SUBMIT", "Please select a file or create one")
         
-        self.clear_all()
+        self.clear_fields()
     
-    def clear_all(self):
-        self.name_edit.clear()
-        self.age_edit.clear()
-        self.title_edit.clear()
-        self.address1_edit.clear()
-        self.address2_edit.clear()
-        self.additional_edit.clear()
+    def clear_fields(self):
+        self.name.clear()
+        self.age.clear()
+        self.title.clear()
+        self.address1.clear()
+        self.address2.clear()
+        self.additional.clear()
     
     def populate_table(self, row, timestamp, name, age, title, address1, address2, additional):
         self.table.insertRow(row)
