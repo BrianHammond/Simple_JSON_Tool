@@ -2,9 +2,9 @@
 try: 
     from PyQt6 import *
 except ModuleNotFoundError: # if it's not then it will automatically be installed
-    print("PyQT6 module is not installed")
+    print("PyQt6 module is not installed")
     import subprocess
-    required_packages = ['PyQT6']
+    required_packages = ['PyQt6']
     for package in required_packages:
         subprocess.call(['pip', 'install', package])
 
