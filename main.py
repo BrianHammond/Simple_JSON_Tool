@@ -1,6 +1,6 @@
 # checks to see if the 'PyQT6' module is installed
 try: 
-    from PyQt6 import *
+    from PyQt6.QtWidgets import QApplication
 except ModuleNotFoundError: # if it's not then it will automatically be installed
     print("PyQt6 module is not installed")
     import subprocess
