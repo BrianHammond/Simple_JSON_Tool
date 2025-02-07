@@ -1,13 +1,16 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog, QTableWidgetItem, QMessageBox
-from PyQt6 import uic
 import json
 import datetime
 import sys
+from PySide6.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog, QTableWidgetItem, QMessageBox
+from main_ui import Ui_MainWindow as main_ui
+from about_ui import Ui_MainWindow as about_ui
+import resources_rc
 
-class MainWindow(QMainWindow):
+
+class MainWindow(QMainWindow, main_ui):
     def __init__(self):
         super().__init__()
-        uic.loadUi("main.ui", self) #load the UI file
+        self.setupUi(self)
 
         #buttons
         self.create_file_button.clicked.connect(self.create_file) # used to create a new .csv file
@@ -15,7 +18,7 @@ class MainWindow(QMainWindow):
         self.submit_button.clicked.connect(self.submit_file) # used to append to a .csv file
 
         #menu bar
-        self.actionAbout.triggered.connect(self.about)
+        self.actionAbout.triggered.connect(self.show_about)
         self.actionAbout_Qt.triggered.connect(self.about_qt)
 
         #text fields
@@ -128,13 +131,17 @@ class MainWindow(QMainWindow):
         self.table.setItem(row, 5, QTableWidgetItem(address2))
         self.table.setItem(row, 6, QTableWidgetItem(additional))
 
-    def about(self):
-        self.window = QDialog()
-        uic.loadUi("about.ui", self.window) #load the UI file
-        self.window.show()
+    def show_about(self):
+        self.about_window = AboutWindow()
+        self.about_window.show()
 
     def about_qt(self):
         QApplication.aboutQt()
+
+class AboutWindow(QMainWindow, about_ui):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv) # needs to run first
