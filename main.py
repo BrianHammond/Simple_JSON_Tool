@@ -3,7 +3,7 @@ import datetime
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableWidgetItem, QMessageBox
 from main_ui import Ui_MainWindow as main_ui
-from about_ui import Ui_MainWindow as about_ui
+from about_window import AboutWindow
 
 class MainWindow(QMainWindow, main_ui):
     def __init__(self):
@@ -135,11 +135,6 @@ class MainWindow(QMainWindow, main_ui):
 
     def about_qt(self):
         QApplication.aboutQt()
-
-class AboutWindow(QMainWindow, about_ui):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv) # needs to run first
