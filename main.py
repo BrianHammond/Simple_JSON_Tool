@@ -1,7 +1,9 @@
 import json
 import datetime
 import sys
+import qdarkstyle
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableWidgetItem, QMessageBox
+from PySide6.QtCore import QSettings
 from main_ui import Ui_MainWindow as main_ui
 from about_window import AboutWindow
 
@@ -9,6 +11,8 @@ class MainWindow(QMainWindow, main_ui):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.settings = QSettings('settings.ini', QSettings.IniFormat)
+        self.loadSettings()
 
         #buttons
         self.create_file_button.clicked.connect(self.create_file) # used to create a new .csv file
@@ -17,7 +21,8 @@ class MainWindow(QMainWindow, main_ui):
 
         #menu bar
         self.actionAbout.triggered.connect(self.show_about)
-        self.actionAbout_Qt.triggered.connect(self.about_qt)
+        self.actionAboutQt.triggered.connect(self.about_qt)
+        self.actionDarkMode.toggled.connect(self.dark_mode)
 
         #text fields
         self.name = self.name_edit
@@ -129,12 +134,36 @@ class MainWindow(QMainWindow, main_ui):
         self.table.setItem(row, 5, QTableWidgetItem(address2))
         self.table.setItem(row, 6, QTableWidgetItem(additional))
 
+    def dark_mode(self, checked):
+        if checked:
+            self.setStyleSheet(qdarkstyle.load_stylesheet_pyside6())
+        else:
+            self.setStyleSheet('')
+
     def show_about(self):
         self.about_window = AboutWindow()
         self.about_window.show()
 
     def about_qt(self):
         QApplication.aboutQt()
+
+    def closeEvent(self, event): #settings will save when closing the app
+        self.settings.setValue('window_size', self.size())
+        self.settings.setValue('window_pos', self.pos())
+        self.settings.setValue('dark_mode', self.actionDarkMode.isChecked())
+        event.accept()
+
+    def loadSettings(self): #settings will load when opening the app
+        size = self.settings.value('window_size', None)
+        pos = self.settings.value('window_pos', None)
+        dark = self.settings.value('dark_mode')
+        if size is not None:
+            self.resize(size)
+        if pos is not None:
+            self.move(pos)
+        if dark == 'true':
+            self.actionDarkMode.setChecked(True)
+            self.setStyleSheet(qdarkstyle.load_stylesheet_pyside6())
 
 if __name__ == "__main__":
     app = QApplication(sys.argv) # needs to run first

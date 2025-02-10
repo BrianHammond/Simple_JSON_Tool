@@ -39,8 +39,11 @@ class Ui_MainWindow(object):
         self.open_action.setObjectName(u"open_action")
         self.actionAbout = QAction(MainWindow)
         self.actionAbout.setObjectName(u"actionAbout")
-        self.actionAbout_Qt = QAction(MainWindow)
-        self.actionAbout_Qt.setObjectName(u"actionAbout_Qt")
+        self.actionAboutQt = QAction(MainWindow)
+        self.actionAboutQt.setObjectName(u"actionAboutQt")
+        self.actionDarkMode = QAction(MainWindow)
+        self.actionDarkMode.setObjectName(u"actionDarkMode")
+        self.actionDarkMode.setCheckable(True)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
@@ -172,11 +175,15 @@ class Ui_MainWindow(object):
         self.menuBar.setGeometry(QRect(0, 0, 764, 22))
         self.menuHelp = QMenu(self.menuBar)
         self.menuHelp.setObjectName(u"menuHelp")
+        self.menuSettings = QMenu(self.menuBar)
+        self.menuSettings.setObjectName(u"menuSettings")
         MainWindow.setMenuBar(self.menuBar)
 
+        self.menuBar.addAction(self.menuSettings.menuAction())
         self.menuBar.addAction(self.menuHelp.menuAction())
         self.menuHelp.addAction(self.actionAbout)
-        self.menuHelp.addAction(self.actionAbout_Qt)
+        self.menuHelp.addAction(self.actionAboutQt)
+        self.menuSettings.addAction(self.actionDarkMode)
 
         self.retranslateUi(MainWindow)
 
@@ -195,7 +202,8 @@ class Ui_MainWindow(object):
         self.open_action.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+O", None))
 #endif // QT_CONFIG(shortcut)
         self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
-        self.actionAbout_Qt.setText(QCoreApplication.translate("MainWindow", u"About Qt", None))
+        self.actionAboutQt.setText(QCoreApplication.translate("MainWindow", u"About Qt", None))
+        self.actionDarkMode.setText(QCoreApplication.translate("MainWindow", u"Dark Mode", None))
         self.create_file_button.setText(QCoreApplication.translate("MainWindow", u"Create New File", None))
         self.select_button.setText(QCoreApplication.translate("MainWindow", u"Select File", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Employee Information", None))
@@ -221,5 +229,6 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem6 = self.table.horizontalHeaderItem(6)
         ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Additional", None));
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
+        self.menuSettings.setTitle(QCoreApplication.translate("MainWindow", u"Settings", None))
     # retranslateUi
 
