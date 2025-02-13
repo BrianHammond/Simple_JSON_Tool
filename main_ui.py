@@ -37,13 +37,13 @@ class Ui_MainWindow(object):
         self.about_action.setObjectName(u"about_action")
         self.open_action = QAction(MainWindow)
         self.open_action.setObjectName(u"open_action")
-        self.actionAbout = QAction(MainWindow)
-        self.actionAbout.setObjectName(u"actionAbout")
-        self.actionAboutQt = QAction(MainWindow)
-        self.actionAboutQt.setObjectName(u"actionAboutQt")
-        self.actionDarkMode = QAction(MainWindow)
-        self.actionDarkMode.setObjectName(u"actionDarkMode")
-        self.actionDarkMode.setCheckable(True)
+        self.action_about = QAction(MainWindow)
+        self.action_about.setObjectName(u"action_about")
+        self.action_about_qt = QAction(MainWindow)
+        self.action_about_qt.setObjectName(u"action_about_qt")
+        self.action_dark_mode = QAction(MainWindow)
+        self.action_dark_mode.setObjectName(u"action_dark_mode")
+        self.action_dark_mode.setCheckable(True)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
@@ -51,15 +51,15 @@ class Ui_MainWindow(object):
         self.verticalLayout.setContentsMargins(10, 10, 10, 10)
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.create_file_button = QPushButton(self.centralwidget)
-        self.create_file_button.setObjectName(u"create_file_button")
+        self.button_create = QPushButton(self.centralwidget)
+        self.button_create.setObjectName(u"button_create")
 
-        self.horizontalLayout_4.addWidget(self.create_file_button)
+        self.horizontalLayout_4.addWidget(self.button_create)
 
-        self.select_button = QPushButton(self.centralwidget)
-        self.select_button.setObjectName(u"select_button")
+        self.button_import = QPushButton(self.centralwidget)
+        self.button_import.setObjectName(u"button_import")
 
-        self.horizontalLayout_4.addWidget(self.select_button)
+        self.horizontalLayout_4.addWidget(self.button_import)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_4)
@@ -77,45 +77,45 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.name_edit = QLineEdit(self.groupBox)
-        self.name_edit.setObjectName(u"name_edit")
+        self.line_name = QLineEdit(self.groupBox)
+        self.line_name.setObjectName(u"line_name")
 
-        self.horizontalLayout_2.addWidget(self.name_edit)
+        self.horizontalLayout_2.addWidget(self.line_name)
 
-        self.age_edit = QLineEdit(self.groupBox)
-        self.age_edit.setObjectName(u"age_edit")
+        self.line_age = QLineEdit(self.groupBox)
+        self.line_age.setObjectName(u"line_age")
 
-        self.horizontalLayout_2.addWidget(self.age_edit)
+        self.horizontalLayout_2.addWidget(self.line_age)
 
-        self.title_edit = QLineEdit(self.groupBox)
-        self.title_edit.setObjectName(u"title_edit")
+        self.line_title = QLineEdit(self.groupBox)
+        self.line_title.setObjectName(u"line_title")
 
-        self.horizontalLayout_2.addWidget(self.title_edit)
+        self.horizontalLayout_2.addWidget(self.line_title)
 
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
 
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.address1_edit = QLineEdit(self.groupBox)
-        self.address1_edit.setObjectName(u"address1_edit")
+        self.line_address1 = QLineEdit(self.groupBox)
+        self.line_address1.setObjectName(u"line_address1")
 
-        self.horizontalLayout_5.addWidget(self.address1_edit)
+        self.horizontalLayout_5.addWidget(self.line_address1)
 
-        self.address2_edit = QLineEdit(self.groupBox)
-        self.address2_edit.setObjectName(u"address2_edit")
+        self.line_address2 = QLineEdit(self.groupBox)
+        self.line_address2.setObjectName(u"line_address2")
 
-        self.horizontalLayout_5.addWidget(self.address2_edit)
+        self.horizontalLayout_5.addWidget(self.line_address2)
 
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_5)
 
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.additional_edit = QLineEdit(self.groupBox)
-        self.additional_edit.setObjectName(u"additional_edit")
+        self.line_information = QLineEdit(self.groupBox)
+        self.line_information.setObjectName(u"line_information")
 
-        self.horizontalLayout_6.addWidget(self.additional_edit)
+        self.horizontalLayout_6.addWidget(self.line_information)
 
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_6)
@@ -128,15 +128,15 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.submit_button = QPushButton(self.centralwidget)
-        self.submit_button.setObjectName(u"submit_button")
+        self.button_submit = QPushButton(self.centralwidget)
+        self.button_submit.setObjectName(u"button_submit")
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.submit_button.sizePolicy().hasHeightForWidth())
-        self.submit_button.setSizePolicy(sizePolicy1)
+        sizePolicy1.setHeightForWidth(self.button_submit.sizePolicy().hasHeightForWidth())
+        self.button_submit.setSizePolicy(sizePolicy1)
 
-        self.horizontalLayout_3.addWidget(self.submit_button)
+        self.horizontalLayout_3.addWidget(self.button_submit)
 
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -163,6 +163,7 @@ class Ui_MainWindow(object):
         __qtablewidgetitem6 = QTableWidgetItem()
         self.table.setHorizontalHeaderItem(6, __qtablewidgetitem6)
         self.table.setObjectName(u"table")
+        self.table.horizontalHeader().setStretchLastSection(True)
 
         self.verticalLayout.addWidget(self.table)
 
@@ -181,9 +182,9 @@ class Ui_MainWindow(object):
 
         self.menuBar.addAction(self.menuSettings.menuAction())
         self.menuBar.addAction(self.menuHelp.menuAction())
-        self.menuHelp.addAction(self.actionAbout)
-        self.menuHelp.addAction(self.actionAboutQt)
-        self.menuSettings.addAction(self.actionDarkMode)
+        self.menuHelp.addAction(self.action_about)
+        self.menuHelp.addAction(self.action_about_qt)
+        self.menuSettings.addAction(self.action_dark_mode)
 
         self.retranslateUi(MainWindow)
 
@@ -201,19 +202,19 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(shortcut)
         self.open_action.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+O", None))
 #endif // QT_CONFIG(shortcut)
-        self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
-        self.actionAboutQt.setText(QCoreApplication.translate("MainWindow", u"About Qt", None))
-        self.actionDarkMode.setText(QCoreApplication.translate("MainWindow", u"Dark Mode", None))
-        self.create_file_button.setText(QCoreApplication.translate("MainWindow", u"Create New File", None))
-        self.select_button.setText(QCoreApplication.translate("MainWindow", u"Select File", None))
+        self.action_about.setText(QCoreApplication.translate("MainWindow", u"About", None))
+        self.action_about_qt.setText(QCoreApplication.translate("MainWindow", u"About Qt", None))
+        self.action_dark_mode.setText(QCoreApplication.translate("MainWindow", u"Dark Mode", None))
+        self.button_create.setText(QCoreApplication.translate("MainWindow", u"Create New File", None))
+        self.button_import.setText(QCoreApplication.translate("MainWindow", u"Import File", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Employee Information", None))
-        self.name_edit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Name", None))
-        self.age_edit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Age", None))
-        self.title_edit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Title", None))
-        self.address1_edit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Address 1", None))
-        self.address2_edit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Address 2", None))
-        self.additional_edit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Additional Information", None))
-        self.submit_button.setText(QCoreApplication.translate("MainWindow", u"Submit", None))
+        self.line_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Name", None))
+        self.line_age.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Age", None))
+        self.line_title.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Title", None))
+        self.line_address1.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Address 1", None))
+        self.line_address2.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Address 2", None))
+        self.line_information.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Additional Information", None))
+        self.button_submit.setText(QCoreApplication.translate("MainWindow", u"Submit", None))
         ___qtablewidgetitem = self.table.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Timestamp", None));
         ___qtablewidgetitem1 = self.table.horizontalHeaderItem(1)
