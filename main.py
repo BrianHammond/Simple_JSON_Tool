@@ -7,7 +7,6 @@ from PySide6.QtCore import QSettings
 from main_ui import Ui_MainWindow as main_ui
 from about_ui import Ui_Form as about_ui
 
-
 class MainWindow(QMainWindow, main_ui): # used to display the main user interface
     def __init__(self):
         super().__init__()
@@ -126,14 +125,16 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.additional.clear()
     
     def populate_table(self, row, timestamp, name, age, title, address1, address2, additional):
+        self.table.setColumnCount(7)
+        self.table.setHorizontalHeaderLabels(['Timestamp','Name','Age','Title','Address 1','Address 2','Additional Information'])
         self.table.insertRow(row)
-        self.table.setItem(row, 0, QTableWidgetItem(timestamp))
-        self.table.setItem(row, 1, QTableWidgetItem(name))
-        self.table.setItem(row, 2, QTableWidgetItem(age))
-        self.table.setItem(row, 3, QTableWidgetItem(title))
-        self.table.setItem(row, 4, QTableWidgetItem(address1))
-        self.table.setItem(row, 5, QTableWidgetItem(address2))
-        self.table.setItem(row, 6, QTableWidgetItem(additional))
+        self.table.setItem(row, 0, QTableWidgetItem('  '+timestamp+'  '))
+        self.table.setItem(row, 1, QTableWidgetItem('  '+name+'  '))
+        self.table.setItem(row, 2, QTableWidgetItem('  '+age+'  '))
+        self.table.setItem(row, 3, QTableWidgetItem('  '+title+'  '))
+        self.table.setItem(row, 4, QTableWidgetItem('  '+address1+'  '))
+        self.table.setItem(row, 5, QTableWidgetItem('  '+address2+'  '))
+        self.table.setItem(row, 6, QTableWidgetItem('  '+additional+'  '))
         self.table.resizeColumnsToContents()
         self.table.resizeRowsToContents()
 
@@ -153,8 +154,6 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
     def closeEvent(self, event):  # Save settings when closing the app
         self.settings_manager.save_settings()  # Save settings using the manager
         event.accept()
-
-
 
 class SettingsManager: # used to load and save settings when opening and closing the app
     def __init__(self, main_window):
@@ -186,9 +185,6 @@ class AboutWindow(QWidget, about_ui): # Configures the About window
 
         if dark_mode:
             self.setStyleSheet(qdarkstyle.load_stylesheet_pyside6())
-
-
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv) # needs to run first
