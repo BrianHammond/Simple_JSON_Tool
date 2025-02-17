@@ -49,21 +49,6 @@ class Ui_MainWindow(object):
         self.verticalLayout = QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(10, 10, 10, 10)
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.button_create = QPushButton(self.centralwidget)
-        self.button_create.setObjectName(u"button_create")
-
-        self.horizontalLayout_4.addWidget(self.button_create)
-
-        self.button_import = QPushButton(self.centralwidget)
-        self.button_import.setObjectName(u"button_import")
-
-        self.horizontalLayout_4.addWidget(self.button_import)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_4)
-
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.groupBox = QGroupBox(self.centralwidget)
@@ -126,6 +111,31 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout)
 
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.button_create = QPushButton(self.centralwidget)
+        self.button_create.setObjectName(u"button_create")
+
+        self.horizontalLayout_4.addWidget(self.button_create)
+
+        self.button_update = QPushButton(self.centralwidget)
+        self.button_update.setObjectName(u"button_update")
+
+        self.horizontalLayout_4.addWidget(self.button_update)
+
+        self.button_delete = QPushButton(self.centralwidget)
+        self.button_delete.setObjectName(u"button_delete")
+
+        self.horizontalLayout_4.addWidget(self.button_delete)
+
+        self.button_import = QPushButton(self.centralwidget)
+        self.button_import.setObjectName(u"button_import")
+
+        self.horizontalLayout_4.addWidget(self.button_import)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_4)
+
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.button_submit = QPushButton(self.centralwidget)
@@ -163,6 +173,17 @@ class Ui_MainWindow(object):
         self.menuSettings = QMenu(self.menuBar)
         self.menuSettings.setObjectName(u"menuSettings")
         MainWindow.setMenuBar(self.menuBar)
+        QWidget.setTabOrder(self.line_name, self.line_age)
+        QWidget.setTabOrder(self.line_age, self.line_title)
+        QWidget.setTabOrder(self.line_title, self.line_address1)
+        QWidget.setTabOrder(self.line_address1, self.line_address2)
+        QWidget.setTabOrder(self.line_address2, self.line_information)
+        QWidget.setTabOrder(self.line_information, self.button_create)
+        QWidget.setTabOrder(self.button_create, self.button_update)
+        QWidget.setTabOrder(self.button_update, self.button_delete)
+        QWidget.setTabOrder(self.button_delete, self.button_import)
+        QWidget.setTabOrder(self.button_import, self.button_submit)
+        QWidget.setTabOrder(self.button_submit, self.table)
 
         self.menuBar.addAction(self.menuSettings.menuAction())
         self.menuBar.addAction(self.menuHelp.menuAction())
@@ -189,8 +210,6 @@ class Ui_MainWindow(object):
         self.action_about.setText(QCoreApplication.translate("MainWindow", u"About", None))
         self.action_about_qt.setText(QCoreApplication.translate("MainWindow", u"About Qt", None))
         self.action_dark_mode.setText(QCoreApplication.translate("MainWindow", u"Dark Mode", None))
-        self.button_create.setText(QCoreApplication.translate("MainWindow", u"Create New File", None))
-        self.button_import.setText(QCoreApplication.translate("MainWindow", u"Import File", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Employee Information", None))
         self.line_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Name", None))
         self.line_age.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Age", None))
@@ -198,6 +217,10 @@ class Ui_MainWindow(object):
         self.line_address1.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Address 1", None))
         self.line_address2.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Address 2", None))
         self.line_information.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Additional Information", None))
+        self.button_create.setText(QCoreApplication.translate("MainWindow", u"Create New File", None))
+        self.button_update.setText(QCoreApplication.translate("MainWindow", u"Update Entry", None))
+        self.button_delete.setText(QCoreApplication.translate("MainWindow", u"Delete Entry", None))
+        self.button_import.setText(QCoreApplication.translate("MainWindow", u"Import File", None))
         self.button_submit.setText(QCoreApplication.translate("MainWindow", u"Submit", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
         self.menuSettings.setTitle(QCoreApplication.translate("MainWindow", u"Settings", None))

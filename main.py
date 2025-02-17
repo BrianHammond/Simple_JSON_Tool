@@ -3,7 +3,7 @@ import datetime
 import sys
 import qdarkstyle
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QFileDialog, QTableWidgetItem, QMessageBox
-from PySide6.QtCore import QSettings
+from PySide6.QtCore import QSettings, Qt
 from main_ui import Ui_MainWindow as main_ui
 from about_ui import Ui_Form as about_ui
 
@@ -15,9 +15,11 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.settings_manager.load_settings()  # Load settings when the app starts
 
         #buttons
-        self.button_create.clicked.connect(self.create_file) # used to create a new .csv file
-        self.button_import.clicked.connect(self.import_file) # used to open a .csv file
-        self.button_submit.clicked.connect(self.submit_file) # used to append to a .csv file
+        self.button_create.clicked.connect(self.create_file) # used to create a new .json file
+        self.button_import.clicked.connect(self.import_file) # used to import a .json file
+        self.button_submit.clicked.connect(self.submit_file) # write to .json
+        self.button_update.clicked.connect(self.update_file) # update .json
+        self.button_delete.clicked.connect(self.delete_entry)
 
         #menu bar
         self.action_about.triggered.connect(self.show_about)
@@ -33,8 +35,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.additional = self.line_information
 
     def create_file(self):
-        self.table.setRowCount(0)
-        self.clear_fields()
+        self.initialize_table()
         self.filename = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.json)',)
         self.setWindowTitle(self.filename[0].split('/')[-1])
 
@@ -48,8 +49,8 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
             pass
 
     def import_file(self):
-        self.table.setRowCount(0)
         self.clear_fields()
+        self.initialize_table()
         self.filename = QFileDialog.getOpenFileName(self, 'create a new file', '', 'Data File (*.json)',)
         self.setWindowTitle(self.filename[0].split('/')[-1])
 
@@ -61,6 +62,10 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
                 timestamp = self.current_date
 
                 for employee in data['Employees']:
+
+                    if not employee.get("Timestamp"): # If the timestamp is missing or blank, generate a new one
+                        employee["Timestamp"] = timestamp  # Set it to the current timestamp if it's missing
+
                     name = employee['Name']
                     age = employee['Age']
                     title = employee['Title']
@@ -68,12 +73,11 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
                     address2 = employee['Address']['Address 2']
                     additional = employee['Misc'][0]
 
-                    self.populate_table(row, timestamp, name, age, title, address1, address2, additional)
+                    self.populate_table(row, employee["Timestamp"], name, age, title, address1, address2, additional)
+                    row += 1
         
         except FileNotFoundError:
             pass
-
-        self.submit_file
 
     def submit_file(self):
         self.current_date = datetime.datetime.now().strftime("%m%d%Y%H%M%S")
@@ -115,7 +119,109 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
             QMessageBox.warning(self, "NO FILE TO SUBMIT", "Please select a file or create one")
         
         self.clear_fields()
-    
+
+    def update_file(self):
+        selected_row = self.table.currentRow()  # Get the selected row in the table
+        if selected_row == -1:  # If no row is selected, show a warning message
+            QMessageBox.warning(self, "No Selection", "Please select a row to update.")
+            return
+
+        # Get the updated values from the table
+        timestamp = self.table.item(selected_row, 0).text()  # Timestamp (no change)
+        name = self.table.item(selected_row, 1).text()
+        age = self.table.item(selected_row, 2).text()
+        title = self.table.item(selected_row, 3).text()
+        address1 = self.table.item(selected_row, 4).text()
+        address2 = self.table.item(selected_row, 5).text()
+        additional = self.table.item(selected_row, 6).text()
+
+        # Updated employee data
+        updated_employee = {
+            "Timestamp": timestamp,
+            "Name": name,
+            "Age": age,
+            "Title": title,
+            "Address": {
+                "Address 1": address1,
+                "Address 2": address2
+            },
+            "Misc": [additional]
+        }
+
+        # Now let's check if we're really updating the file content.
+        try:
+            with open(self.filename[0], "r+") as file:
+                file_content = json.load(file)
+                print("File content before update:", file_content)  # Debugging: Log before update
+
+                # Find the employee with the same timestamp (assuming Timestamp is unique)
+                for idx, employee in enumerate(file_content["Employees"]):
+                    if employee["Timestamp"] == timestamp:
+                        print(f"Found matching employee: {employee}")  # Debugging: Log found employee
+                        file_content["Employees"][idx] = updated_employee  # Update the employee data
+                        print(f"Updated employee: {updated_employee}")  # Debugging: Log updated employee
+                
+                # If no matching employee was found
+                if not any(employee["Timestamp"] == timestamp for employee in file_content["Employees"]):
+                    print(f"No employee with Timestamp {timestamp} found.")  # Debugging: Log if no match
+
+                # Overwrite the file with updated data
+                file.seek(0)  # Move to the beginning of the file
+                file.truncate(0)  # Truncate the file content
+                json.dump(file_content, file, indent=4)
+                print("File content after update:", file_content)  # Debugging: Log after update
+            
+            QMessageBox.information(self, "Success", "Employee data updated successfully.")
+        except Exception as e:
+            print(f"Error updating file: {str(e)}")  # Debugging: Log any error
+            QMessageBox.warning(self, "Error", f"Failed to update file: {str(e)}")
+
+        self.clear_fields()
+
+        self.table.resizeColumnsToContents()
+
+    def delete_entry(self):
+        # Get the selected row in the table
+        selected_row = self.table.currentRow()
+        
+        # If no row is selected, show a warning message
+        if selected_row == -1:
+            QMessageBox.warning(self, "No Selection", "Please select a row to delete.")
+            return
+
+        # Get the timestamp of the selected row (it's in the first column)
+        timestamp = self.table.item(selected_row, 0).text()
+
+        # Confirm the deletion
+        confirm = QMessageBox.question(self, "Confirm Deletion", 
+                                    f"Are you sure you want to delete the entry with Timestamp: {timestamp}?",
+                                    QMessageBox.Yes | QMessageBox.No)
+        if confirm == QMessageBox.No:
+            return
+
+        # Remove the entry from the JSON file
+        try:
+            with open(self.filename[0], "r+") as file:
+                file_content = json.load(file)
+
+                # Find the employee with the same timestamp and remove it
+                file_content["Employees"] = [employee for employee in file_content["Employees"] 
+                                            if employee["Timestamp"] != timestamp]
+                
+                # Overwrite the file with the updated data
+                file.seek(0)
+                file.truncate(0)  # Clear the file content before writing
+                json.dump(file_content, file, indent=4)
+
+            # Remove the selected row from the table
+            self.table.removeRow(selected_row)
+
+            # Show a success message
+            QMessageBox.information(self, "Success", "Employee data deleted successfully.")
+            
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Failed to delete entry: {str(e)}")
+
     def clear_fields(self):
         self.name.clear()
         self.age.clear()
@@ -124,19 +230,27 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.address2.clear()
         self.additional.clear()
     
-    def populate_table(self, row, timestamp, name, age, title, address1, address2, additional):
+    def initialize_table(self):
+        self.table.setRowCount(0)
         self.table.setColumnCount(7)
         self.table.setHorizontalHeaderLabels(['Timestamp','Name','Age','Title','Address 1','Address 2','Additional Information'])
-        self.table.insertRow(row)
-        self.table.setItem(row, 0, QTableWidgetItem('  '+timestamp+'  '))
-        self.table.setItem(row, 1, QTableWidgetItem('  '+name+'  '))
-        self.table.setItem(row, 2, QTableWidgetItem('  '+age+'  '))
-        self.table.setItem(row, 3, QTableWidgetItem('  '+title+'  '))
-        self.table.setItem(row, 4, QTableWidgetItem('  '+address1+'  '))
-        self.table.setItem(row, 5, QTableWidgetItem('  '+address2+'  '))
-        self.table.setItem(row, 6, QTableWidgetItem('  '+additional+'  '))
         self.table.resizeColumnsToContents()
-        self.table.resizeRowsToContents()
+
+    def populate_table(self, row, timestamp, name, age, title, address1, address2, additional):
+        self.table.insertRow(row)
+        self.table.setItem(row, 0, QTableWidgetItem(timestamp))
+        self.table.setItem(row, 1, QTableWidgetItem(name))
+        self.table.setItem(row, 2, QTableWidgetItem(age))
+        self.table.setItem(row, 3, QTableWidgetItem(title))
+        self.table.setItem(row, 4, QTableWidgetItem(address1))
+        self.table.setItem(row, 5, QTableWidgetItem(address2))
+        self.table.setItem(row, 6, QTableWidgetItem(additional))
+
+        for col in range(self.table.columnCount()):
+            self.table.item(row, col).setFlags(self.table.item(row, col).flags() | Qt.ItemIsEditable)
+
+
+        self.table.resizeColumnsToContents()
 
     def dark_mode(self, checked):
         if checked:
