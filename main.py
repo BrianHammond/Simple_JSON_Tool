@@ -15,13 +15,13 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.settings_manager.load_settings()  # Load settings when the app starts
 
         #buttons
-        self.button_create.clicked.connect(self.create_file) # used to create a new .json file
-        self.button_import.clicked.connect(self.import_file) # used to import a .json file
-        self.button_submit.clicked.connect(self.submit_file) # write to .json
+        self.button_add.clicked.connect(self.submit_file) # write to .json
         self.button_update.clicked.connect(self.update_file) # update .json
         self.button_delete.clicked.connect(self.delete_entry)
 
         #menu bar
+        self.action_new.triggered.connect(self.new_file)
+        self.action_open.triggered.connect(self.open_file)
         self.action_about.triggered.connect(self.show_about)
         self.action_about_qt.triggered.connect(self.about_qt)
         self.action_dark_mode.toggled.connect(self.dark_mode)
@@ -34,7 +34,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.address2 = self.line_address2
         self.additional = self.line_information
 
-    def create_file(self):
+    def new_file(self):
         self.initialize_table()
         self.filename = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.json)',)
         self.setWindowTitle(self.filename[0].split('/')[-1])
@@ -48,7 +48,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         except FileNotFoundError:
             pass
 
-    def import_file(self):
+    def open_file(self):
         self.clear_fields()
         self.initialize_table()
         self.filename = QFileDialog.getOpenFileName(self, 'create a new file', '', 'Data File (*.json)',)
