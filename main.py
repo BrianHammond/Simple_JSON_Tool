@@ -15,8 +15,8 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.settings_manager.load_settings()  # Load settings when the app starts
 
         #buttons
-        self.button_add.clicked.connect(self.submit_file) # write to .json
-        self.button_update.clicked.connect(self.update_file) # update .json
+        self.button_add.clicked.connect(self.add_info) # write to .json
+        self.button_update.clicked.connect(self.update_info) # update .json
         self.button_delete.clicked.connect(self.delete_entry)
 
         #menu bar
@@ -35,8 +35,13 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.additional = self.line_information
 
     def new_file(self):
-        self.initialize_table()
         self.filename = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.json)',)
+        
+        if not self.filename[0]:
+            return  # Do nothing if no file is selected
+            
+        self.initialize_table()
+
         self.setWindowTitle(self.filename[0].split('/')[-1])
 
         json_string = '{"Employees":[]}'
@@ -50,8 +55,14 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
 
     def open_file(self):
         self.clear_fields()
-        self.initialize_table()
+        
         self.filename = QFileDialog.getOpenFileName(self, 'create a new file', '', 'Data File (*.json)',)
+
+        if not self.filename[0]:
+            return  # Do nothing if no file is selected
+            
+        self.initialize_table()
+            
         self.setWindowTitle(self.filename[0].split('/')[-1])
 
         try:
@@ -79,7 +90,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         except FileNotFoundError:
             pass
 
-    def submit_file(self):
+    def add_info(self):
         self.current_date = datetime.datetime.now().strftime("%m%d%Y%H%M%S")
         timestamp = self.current_date
         name = self.name.text()
@@ -120,7 +131,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         
         self.clear_fields()
 
-    def update_file(self):
+    def update_info(self):
         selected_row = self.table.currentRow()  # Get the selected row in the table
         if selected_row == -1:  # If no row is selected, show a warning message
             QMessageBox.warning(self, "No Selection", "Please select a row to update.")
