@@ -260,7 +260,6 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         for col in range(self.table.columnCount()):
             self.table.item(row, col).setFlags(self.table.item(row, col).flags() | Qt.ItemIsEditable)
 
-
         self.table.resizeColumnsToContents()
 
     def dark_mode(self, checked):
