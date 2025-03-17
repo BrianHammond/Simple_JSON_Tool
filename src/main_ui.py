@@ -66,10 +66,15 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.line_name = QLineEdit(self.groupBox)
-        self.line_name.setObjectName(u"line_name")
+        self.line_first_name = QLineEdit(self.groupBox)
+        self.line_first_name.setObjectName(u"line_first_name")
 
-        self.horizontalLayout_2.addWidget(self.line_name)
+        self.horizontalLayout_2.addWidget(self.line_first_name)
+
+        self.line_last_name = QLineEdit(self.groupBox)
+        self.line_last_name.setObjectName(u"line_last_name")
+
+        self.horizontalLayout_2.addWidget(self.line_last_name)
 
         self.line_age = QLineEdit(self.groupBox)
         self.line_age.setObjectName(u"line_age")
@@ -155,7 +160,8 @@ class Ui_MainWindow(object):
         self.menuFile = QMenu(self.menuBar)
         self.menuFile.setObjectName(u"menuFile")
         MainWindow.setMenuBar(self.menuBar)
-        QWidget.setTabOrder(self.line_name, self.line_age)
+        QWidget.setTabOrder(self.line_first_name, self.line_last_name)
+        QWidget.setTabOrder(self.line_last_name, self.line_age)
         QWidget.setTabOrder(self.line_age, self.line_title)
         QWidget.setTabOrder(self.line_title, self.line_address1)
         QWidget.setTabOrder(self.line_address1, self.line_address2)
@@ -202,7 +208,8 @@ class Ui_MainWindow(object):
         self.action_open.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+O", None))
 #endif // QT_CONFIG(shortcut)
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Employee Information", None))
-        self.line_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Name", None))
+        self.line_first_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"First Name", None))
+        self.line_last_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Last Name", None))
         self.line_age.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Age", None))
         self.line_title.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Title", None))
         self.line_address1.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Address 1", None))

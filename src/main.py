@@ -2,10 +2,10 @@ import json
 import datetime
 import sys
 import qdarkstyle
-from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QFileDialog, QTableWidgetItem, QMessageBox
+from PySide6.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog, QTableWidgetItem, QMessageBox
 from PySide6.QtCore import QSettings, Qt
 from main_ui import Ui_MainWindow as main_ui
-from about_ui import Ui_Form as about_ui
+from about_ui import Ui_Dialog as about_ui
 
 class MainWindow(QMainWindow, main_ui): # used to display the main user interface
     def __init__(self):
@@ -22,17 +22,9 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         #menu bar
         self.action_new.triggered.connect(self.new_file)
         self.action_open.triggered.connect(self.open_file)
-        self.action_about.triggered.connect(self.show_about)
-        self.action_about_qt.triggered.connect(self.about_qt)
         self.action_dark_mode.toggled.connect(self.dark_mode)
-
-        #text fields
-        self.name = self.line_name
-        self.age = self.line_age
-        self.title = self.line_title
-        self.address1 = self.line_address1
-        self.address2 = self.line_address2
-        self.additional = self.line_information
+        self.action_about_qt.triggered.connect(lambda: QApplication.aboutQt())
+        self.action_about.triggered.connect(lambda: AboutWindow(dark_mode=self.action_dark_mode.isChecked()).exec())
 
     def new_file(self):
         self.filename = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.json)',)
@@ -93,26 +85,30 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
     def add_info(self):
         self.current_date = datetime.datetime.now().strftime("%m%d%Y%H%M%S")
         timestamp = self.current_date
-        name = self.name.text()
-        age = self.age.text()
-        title = self.title.text()
-        address1 = self.address1.text()
-        address2 = self.address2.text()
-        additional = self.additional.text()
+        first_name = self.line_first_name.text()
+        last_name = self.line_last_name.text()
+        age = self.line_age.text()
+        title = self.line_title.text()
+        address1 = self.line_address1.text()
+        address2 = self.line_address2.text()
+        additional = self.line_information.text()
 
         row = self.table.rowCount()
 
-        self.populate_table(row, timestamp, name, age, title, address1, address2, additional)
+        self.populate_table(row, timestamp, first_name, last_name, age, title, address1, address2, additional)
         
         self.employee = {
                             "Timestamp": timestamp,
-                            "Name": name, 
+                            "Name": {
+                                "First Name": first_name,
+                                "Last Name": last_name
+                                },
                             "Age": age, 
                             "Title": title, 
                             "Address": {
-                                        "Address 1": address1, 
-                                        "Address 2": address2
-                            },
+                                "Address 1": address1, 
+                                "Address 2": address2
+                                },
                             "Misc":[
                                  additional
                             ]
@@ -138,24 +134,28 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
             return
 
         # Get the updated values from the table
-        timestamp = self.table.item(selected_row, 0).text()  # Timestamp (no change)
-        name = self.table.item(selected_row, 1).text()
-        age = self.table.item(selected_row, 2).text()
-        title = self.table.item(selected_row, 3).text()
-        address1 = self.table.item(selected_row, 4).text()
-        address2 = self.table.item(selected_row, 5).text()
-        additional = self.table.item(selected_row, 6).text()
+        timestamp = self.table.item(selected_row, 0).text()
+        first_name = self.table.item(selected_row, 1).text()
+        last_name = self.table.item(selected_row, 2).text()
+        age = self.table.item(selected_row, 3).text()
+        title = self.table.item(selected_row, 4).text()
+        address1 = self.table.item(selected_row, 5).text()
+        address2 = self.table.item(selected_row, 6).text()
+        additional = self.table.item(selected_row, 7).text()
 
         # Updated employee data
         updated_employee = {
             "Timestamp": timestamp,
-            "Name": name,
+            "Name": {
+                "First Name": first_name,
+                "Last Name": last_name
+                },
             "Age": age,
             "Title": title,
             "Address": {
                 "Address 1": address1,
                 "Address 2": address2
-            },
+                },
             "Misc": [additional]
         }
 
@@ -234,28 +234,30 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
             QMessageBox.warning(self, "Error", f"Failed to delete entry: {str(e)}")
 
     def clear_fields(self):
-        self.name.clear()
-        self.age.clear()
-        self.title.clear()
-        self.address1.clear()
-        self.address2.clear()
-        self.additional.clear()
+        self.line_first_name.clear()
+        self.line_last_name.clear()
+        self.line_age.clear()
+        self.line_title.clear()
+        self.line_address1.clear()
+        self.line_address2.clear()
+        self.line_information.clear()
     
     def initialize_table(self):
         self.table.setRowCount(0)
-        self.table.setColumnCount(7)
-        self.table.setHorizontalHeaderLabels(['Timestamp','Name','Age','Title','Address 1','Address 2','Additional Information'])
+        self.table.setColumnCount(8)
+        self.table.setHorizontalHeaderLabels(['Timestamp','First Name','Last Name', 'Age','Title','Address 1','Address 2','Additional Information'])
         self.table.resizeColumnsToContents()
 
-    def populate_table(self, row, timestamp, name, age, title, address1, address2, additional):
+    def populate_table(self, row, timestamp, first_name, last_name, age, title, address1, address2, additional):
         self.table.insertRow(row)
         self.table.setItem(row, 0, QTableWidgetItem(timestamp))
-        self.table.setItem(row, 1, QTableWidgetItem(name))
-        self.table.setItem(row, 2, QTableWidgetItem(age))
-        self.table.setItem(row, 3, QTableWidgetItem(title))
-        self.table.setItem(row, 4, QTableWidgetItem(address1))
-        self.table.setItem(row, 5, QTableWidgetItem(address2))
-        self.table.setItem(row, 6, QTableWidgetItem(additional))
+        self.table.setItem(row, 1, QTableWidgetItem(first_name))
+        self.table.setItem(row, 2, QTableWidgetItem(last_name))
+        self.table.setItem(row, 3, QTableWidgetItem(age))
+        self.table.setItem(row, 4, QTableWidgetItem(title))
+        self.table.setItem(row, 5, QTableWidgetItem(address1))
+        self.table.setItem(row, 6, QTableWidgetItem(address2))
+        self.table.setItem(row, 7, QTableWidgetItem(additional))
 
         for col in range(self.table.columnCount()):
             self.table.item(row, col).setFlags(self.table.item(row, col).flags() | Qt.ItemIsEditable)
@@ -267,13 +269,6 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
             self.setStyleSheet(qdarkstyle.load_stylesheet_pyside6())
         else:
             self.setStyleSheet('')
-
-    def show_about(self):  # loads the About window
-        self.about_window = AboutWindow(dark_mode=self.action_dark_mode.isChecked())
-        self.about_window.show()
-
-    def about_qt(self):
-        QApplication.aboutQt()
 
     def closeEvent(self, event):  # Save settings when closing the app
         self.settings_manager.save_settings()  # Save settings using the manager
@@ -302,13 +297,13 @@ class SettingsManager: # used to load and save settings when opening and closing
         self.settings.setValue('window_pos', self.main_window.pos())
         self.settings.setValue('dark_mode', self.main_window.action_dark_mode.isChecked())
 
-class AboutWindow(QWidget, about_ui): # Configures the About window
+class AboutWindow(QDialog, about_ui): # this is the About Window
     def __init__(self, dark_mode=False):
         super().__init__()
         self.setupUi(self)
-
         if dark_mode:
             self.setStyleSheet(qdarkstyle.load_stylesheet_pyside6())
+        self.button_ok.clicked.connect(self.accept)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv) # needs to run first
