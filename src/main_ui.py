@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 6.8.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -50,9 +50,8 @@ class Ui_MainWindow(object):
         self.action_open.setObjectName(u"action_open")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout = QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(10, 10, 10, 10)
+        self.verticalLayout_3 = QVBoxLayout(self.centralwidget)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.groupBox = QGroupBox(self.centralwidget)
@@ -70,6 +69,11 @@ class Ui_MainWindow(object):
         self.line_first_name.setObjectName(u"line_first_name")
 
         self.horizontalLayout_2.addWidget(self.line_first_name)
+
+        self.line_middle_name = QLineEdit(self.groupBox)
+        self.line_middle_name.setObjectName(u"line_middle_name")
+
+        self.horizontalLayout_2.addWidget(self.line_middle_name)
 
         self.line_last_name = QLineEdit(self.groupBox)
         self.line_last_name.setObjectName(u"line_last_name")
@@ -101,6 +105,11 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_5.addWidget(self.line_address2)
 
+        self.line_country = QLineEdit(self.groupBox)
+        self.line_country.setObjectName(u"line_country")
+
+        self.horizontalLayout_5.addWidget(self.line_country)
+
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_5)
 
@@ -114,37 +123,64 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_6)
 
-
-        self.horizontalLayout.addWidget(self.groupBox)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout)
-
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.button_add = QPushButton(self.centralwidget)
+        self.button_add = QPushButton(self.groupBox)
         self.button_add.setObjectName(u"button_add")
 
         self.horizontalLayout_4.addWidget(self.button_add)
 
-        self.button_update = QPushButton(self.centralwidget)
+        self.button_update = QPushButton(self.groupBox)
         self.button_update.setObjectName(u"button_update")
 
         self.horizontalLayout_4.addWidget(self.button_update)
 
-        self.button_delete = QPushButton(self.centralwidget)
+        self.button_delete = QPushButton(self.groupBox)
         self.button_delete.setObjectName(u"button_delete")
 
         self.horizontalLayout_4.addWidget(self.button_delete)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout_4)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_4)
+
+
+        self.horizontalLayout.addWidget(self.groupBox)
+
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout)
+
+        self.groupBox_2 = QGroupBox(self.centralwidget)
+        self.groupBox_2.setObjectName(u"groupBox_2")
+        self.verticalLayout = QVBoxLayout(self.groupBox_2)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.search_firstname = QLineEdit(self.groupBox_2)
+        self.search_firstname.setObjectName(u"search_firstname")
+
+        self.horizontalLayout_3.addWidget(self.search_firstname)
+
+        self.search_lastname = QLineEdit(self.groupBox_2)
+        self.search_lastname.setObjectName(u"search_lastname")
+
+        self.horizontalLayout_3.addWidget(self.search_lastname)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
+
+        self.button_search = QPushButton(self.groupBox_2)
+        self.button_search.setObjectName(u"button_search")
+
+        self.verticalLayout.addWidget(self.button_search)
+
+
+        self.verticalLayout_3.addWidget(self.groupBox_2)
 
         self.table = QTableWidget(self.centralwidget)
         self.table.setObjectName(u"table")
         self.table.horizontalHeader().setStretchLastSection(True)
 
-        self.verticalLayout.addWidget(self.table)
+        self.verticalLayout_3.addWidget(self.table)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
@@ -160,16 +196,21 @@ class Ui_MainWindow(object):
         self.menuFile = QMenu(self.menuBar)
         self.menuFile.setObjectName(u"menuFile")
         MainWindow.setMenuBar(self.menuBar)
-        QWidget.setTabOrder(self.line_first_name, self.line_last_name)
+        QWidget.setTabOrder(self.line_first_name, self.line_middle_name)
+        QWidget.setTabOrder(self.line_middle_name, self.line_last_name)
         QWidget.setTabOrder(self.line_last_name, self.line_age)
         QWidget.setTabOrder(self.line_age, self.line_title)
         QWidget.setTabOrder(self.line_title, self.line_address1)
         QWidget.setTabOrder(self.line_address1, self.line_address2)
-        QWidget.setTabOrder(self.line_address2, self.line_information)
+        QWidget.setTabOrder(self.line_address2, self.line_country)
+        QWidget.setTabOrder(self.line_country, self.line_information)
         QWidget.setTabOrder(self.line_information, self.button_add)
         QWidget.setTabOrder(self.button_add, self.button_update)
         QWidget.setTabOrder(self.button_update, self.button_delete)
-        QWidget.setTabOrder(self.button_delete, self.table)
+        QWidget.setTabOrder(self.button_delete, self.search_firstname)
+        QWidget.setTabOrder(self.search_firstname, self.search_lastname)
+        QWidget.setTabOrder(self.search_lastname, self.button_search)
+        QWidget.setTabOrder(self.button_search, self.table)
 
         self.menuBar.addAction(self.menuFile.menuAction())
         self.menuBar.addAction(self.menuSettings.menuAction())
@@ -209,15 +250,21 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(shortcut)
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Employee Information", None))
         self.line_first_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"First Name", None))
+        self.line_middle_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Middle Name", None))
         self.line_last_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Last Name", None))
         self.line_age.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Age", None))
         self.line_title.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Title", None))
         self.line_address1.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Address 1", None))
         self.line_address2.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Address 2", None))
+        self.line_country.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Country", None))
         self.line_information.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Additional Information", None))
         self.button_add.setText(QCoreApplication.translate("MainWindow", u"Add", None))
         self.button_update.setText(QCoreApplication.translate("MainWindow", u"Update Info", None))
         self.button_delete.setText(QCoreApplication.translate("MainWindow", u"Delete Entry", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"Search", None))
+        self.search_firstname.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search First Name", None))
+        self.search_lastname.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search Last Name", None))
+        self.button_search.setText(QCoreApplication.translate("MainWindow", u"Search", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
         self.menuSettings.setTitle(QCoreApplication.translate("MainWindow", u"Settings", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))

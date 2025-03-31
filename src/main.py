@@ -13,20 +13,22 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.setupUi(self)
         self.settings_manager = SettingsManager(self)  # Initializes SettingsManager
         self.settings_manager.load_settings()  # Load settings when the app starts
+        self.all_employees = [] # used to store all employees in the table
 
         #buttons
         self.button_add.clicked.connect(self.add_info) # write to .json
         self.button_update.clicked.connect(self.update_info) # update .json
         self.button_delete.clicked.connect(self.delete_entry)
+        self.button_search.clicked.connect(self.search_entry)
 
         #menu bar
-        self.action_new.triggered.connect(self.new_file)
-        self.action_open.triggered.connect(self.open_file)
+        self.action_new.triggered.connect(self.new_file) # create a new .json file
+        self.action_open.triggered.connect(self.open_file) # imports .json file
         self.action_dark_mode.toggled.connect(self.dark_mode)
         self.action_about_qt.triggered.connect(lambda: QApplication.aboutQt())
         self.action_about.triggered.connect(lambda: AboutWindow(dark_mode=self.action_dark_mode.isChecked()).exec())
 
-    def new_file(self):
+    def new_file(self): # create a new .json file
         self.filename = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.json)',)
         
         if not self.filename[0]:
@@ -45,89 +47,80 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         except FileNotFoundError:
             pass
 
-    def open_file(self):
+    def open_file(self): # open an existing .json file
         self.clear_fields()
-        
-        self.filename = QFileDialog.getOpenFileName(self, 'create a new file', '', 'Data File (*.json)',)
-
+        self.filename = QFileDialog.getOpenFileName(self, 'Open a file', '', 'Data File (*.json)')
         if not self.filename[0]:
-            return  # Do nothing if no file is selected
-            
+            return
+
         self.initialize_table()
-            
         self.setWindowTitle(self.filename[0].split('/')[-1])
 
         try:
-            with open(self.filename[0], "r+") as file: # this will write the txt_data and create a new file, or overwrite the txt_data if file already available 
+            with open(self.filename[0], "r+") as file:
                 data = json.load(file)
+                self.all_employees = data['Employees']  # stores the full dataset
                 row = 0
                 self.current_date = datetime.datetime.now().strftime("%m%d%Y%H%M%S")
                 timestamp = self.current_date
-
+            
                 for employee in data['Employees']:
-
-                    if not employee.get("Timestamp"): # If the timestamp is missing or blank, generate a new one
-                        employee["Timestamp"] = timestamp  # Set it to the current timestamp if it's missing
-
-                    name = employee['Name']
+                    if not employee.get("Timestamp"):
+                        employee["Timestamp"] = timestamp
+                    first_name = employee['Name']['First Name']
+                    middle_name = employee['Name']['Middle Name']
+                    last_name = employee['Name']['Last Name']
                     age = employee['Age']
                     title = employee['Title']
                     address1 = employee['Address']['Address 1']
                     address2 = employee['Address']['Address 2']
+                    country = employee['Address']['Country']
                     additional = employee['Misc'][0]
-
-                    self.populate_table(row, employee["Timestamp"], name, age, title, address1, address2, additional)
+                    self.populate_table(row, employee["Timestamp"], first_name, middle_name, last_name, age, title, address1, address2, country, additional)
                     row += 1
-        
         except FileNotFoundError:
             pass
 
-    def add_info(self):
+    def add_info(self): # Add Button pressed
         self.current_date = datetime.datetime.now().strftime("%m%d%Y%H%M%S")
         timestamp = self.current_date
         first_name = self.line_first_name.text()
+        middle_name = self.line_middle_name.text()
         last_name = self.line_last_name.text()
         age = self.line_age.text()
         title = self.line_title.text()
         address1 = self.line_address1.text()
         address2 = self.line_address2.text()
+        country = self.line_country.text()
         additional = self.line_information.text()
 
         row = self.table.rowCount()
+        self.populate_table(row, timestamp, first_name, middle_name, last_name, age, title, address1, address2, country, additional)
 
-        self.populate_table(row, timestamp, first_name, last_name, age, title, address1, address2, additional)
-        
         self.employee = {
-                            "Timestamp": timestamp,
-                            "Name": {
-                                "First Name": first_name,
-                                "Last Name": last_name
-                                },
-                            "Age": age, 
-                            "Title": title, 
-                            "Address": {
-                                "Address 1": address1, 
-                                "Address 2": address2
-                                },
-                            "Misc":[
-                                 additional
-                            ]
-                        }
-        
+            "Timestamp": timestamp,
+            "Name": {"First Name": first_name, "Middle Name": middle_name, "Last Name": last_name},
+            "Age": age,
+            "Title": title,
+            "Address": {"Address 1": address1, "Address 2": address2, "Country": country},
+            "Misc": [additional]
+        }
+
         try:
             with open(self.filename[0], "r+") as file:
                 file_content = json.load(file)
                 file_content["Employees"].append(self.employee)
                 file.seek(0)
                 json.dump(file_content, file, indent=4)
+                self.all_employees.append(self.employee)  # update the in-memory full dataset
         except AttributeError:
             self.clear_fields()
             self.table.setRowCount(0)
             QMessageBox.warning(self, "NO FILE TO SUBMIT", "Please select a file or create one")
-        
+
         self.clear_fields()
 
-    def update_info(self):
+    def update_info(self): # Update Button pressed
         selected_row = self.table.currentRow()  # Get the selected row in the table
         if selected_row == -1:  # If no row is selected, show a warning message
             QMessageBox.warning(self, "No Selection", "Please select a row to update.")
@@ -136,25 +129,29 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         # Get the updated values from the table
         timestamp = self.table.item(selected_row, 0).text()
         first_name = self.table.item(selected_row, 1).text()
-        last_name = self.table.item(selected_row, 2).text()
-        age = self.table.item(selected_row, 3).text()
-        title = self.table.item(selected_row, 4).text()
-        address1 = self.table.item(selected_row, 5).text()
-        address2 = self.table.item(selected_row, 6).text()
-        additional = self.table.item(selected_row, 7).text()
+        middle_name = self.table.item(selected_row, 2).text()
+        last_name = self.table.item(selected_row, 3).text()
+        age = self.table.item(selected_row, 4).text()
+        title = self.table.item(selected_row, 5).text()
+        address1 = self.table.item(selected_row, 6).text()
+        address2 = self.table.item(selected_row, 7).text()
+        country = self.table.item(selected_row, 8).text()
+        additional = self.table.item(selected_row, 9).text()
 
         # Updated employee data
         updated_employee = {
             "Timestamp": timestamp,
             "Name": {
                 "First Name": first_name,
+                "Middle Name": middle_name,
                 "Last Name": last_name
                 },
             "Age": age,
             "Title": title,
             "Address": {
                 "Address 1": address1,
-                "Address 2": address2
+                "Address 2": address2,
+                "Country": country
                 },
             "Misc": [additional]
         }
@@ -191,7 +188,49 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
 
         self.table.resizeColumnsToContents()
 
-    def delete_entry(self):
+    def search_entry(self): # Search Button pressed
+        search_firstname = self.search_firstname.text().strip().lower()
+        search_lastname = self.search_lastname.text().strip().lower()
+
+        if not hasattr(self, 'filename') or not self.filename[0]:
+            QMessageBox.warning(self, "NO FILE LOADED", "Please open or create a file before searching.")
+            return
+
+        filtered_employees = []
+        for employee in self.all_employees:
+            first_name = employee["Name"]["First Name"].lower()
+            last_name = employee["Name"]["Last Name"].lower()
+
+            if not search_firstname and not search_lastname:
+                filtered_employees.append(employee)
+            elif search_firstname and not search_lastname:
+                if search_firstname in first_name:
+                    filtered_employees.append(employee)
+            elif search_lastname and not search_firstname:
+                if search_lastname in last_name:
+                    filtered_employees.append(employee)
+            elif search_firstname and search_lastname:
+                if search_firstname in first_name and search_lastname in last_name:
+                    filtered_employees.append(employee)
+
+        self.table.setRowCount(0)
+
+        for row, employee in enumerate(filtered_employees):
+            self.populate_table(
+                row,
+                employee["Timestamp"],
+                employee["Name"]["First Name"],
+                employee["Name"]["Middle Name"],
+                employee["Name"]["Last Name"],
+                employee["Age"],
+                employee["Title"],
+                employee["Address"]["Address 1"],
+                employee["Address"]["Address 2"],
+                employee["Address"]["Country"],
+                employee["Misc"][0]
+            )
+
+    def delete_entry(self): # Delete Button pressed
         # Get the selected row in the table
         selected_row = self.table.currentRow()
         
@@ -235,29 +274,33 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
 
     def clear_fields(self):
         self.line_first_name.clear()
+        self.line_middle_name.clear()
         self.line_last_name.clear()
         self.line_age.clear()
         self.line_title.clear()
         self.line_address1.clear()
         self.line_address2.clear()
+        self.line_country.clear()
         self.line_information.clear()
     
     def initialize_table(self):
         self.table.setRowCount(0)
-        self.table.setColumnCount(8)
-        self.table.setHorizontalHeaderLabels(['Timestamp','First Name','Last Name', 'Age','Title','Address 1','Address 2','Additional Information'])
+        self.table.setColumnCount(10)
+        self.table.setHorizontalHeaderLabels(['Timestamp', 'First Name', 'Middle Name', 'Last Name', 'Age', 'Title', 'Address 1', 'Address 2','Country', 'Additional Information'])
         self.table.resizeColumnsToContents()
 
-    def populate_table(self, row, timestamp, first_name, last_name, age, title, address1, address2, additional):
+    def populate_table(self, row, timestamp, first_name, middle_name, last_name, age, title, address1, address2, country, additional):
         self.table.insertRow(row)
         self.table.setItem(row, 0, QTableWidgetItem(timestamp))
         self.table.setItem(row, 1, QTableWidgetItem(first_name))
-        self.table.setItem(row, 2, QTableWidgetItem(last_name))
-        self.table.setItem(row, 3, QTableWidgetItem(age))
-        self.table.setItem(row, 4, QTableWidgetItem(title))
-        self.table.setItem(row, 5, QTableWidgetItem(address1))
-        self.table.setItem(row, 6, QTableWidgetItem(address2))
-        self.table.setItem(row, 7, QTableWidgetItem(additional))
+        self.table.setItem(row, 2, QTableWidgetItem(middle_name))
+        self.table.setItem(row, 3, QTableWidgetItem(last_name))
+        self.table.setItem(row, 4, QTableWidgetItem(age))
+        self.table.setItem(row, 5, QTableWidgetItem(title))
+        self.table.setItem(row, 6, QTableWidgetItem(address1))
+        self.table.setItem(row, 7, QTableWidgetItem(address2))
+        self.table.setItem(row, 8, QTableWidgetItem(country))
+        self.table.setItem(row, 9, QTableWidgetItem(additional))
 
         for col in range(self.table.columnCount()):
             self.table.item(row, col).setFlags(self.table.item(row, col).flags() | Qt.ItemIsEditable)
