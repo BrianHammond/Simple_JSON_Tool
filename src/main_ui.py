@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.3
+## Created by: Qt User Interface Compiler version 6.8.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -155,23 +155,23 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.search_firstname = QLineEdit(self.groupBox_2)
-        self.search_firstname.setObjectName(u"search_firstname")
+        self.filter_firstname = QLineEdit(self.groupBox_2)
+        self.filter_firstname.setObjectName(u"filter_firstname")
 
-        self.horizontalLayout_3.addWidget(self.search_firstname)
+        self.horizontalLayout_3.addWidget(self.filter_firstname)
 
-        self.search_lastname = QLineEdit(self.groupBox_2)
-        self.search_lastname.setObjectName(u"search_lastname")
+        self.filter_lastname = QLineEdit(self.groupBox_2)
+        self.filter_lastname.setObjectName(u"filter_lastname")
 
-        self.horizontalLayout_3.addWidget(self.search_lastname)
+        self.horizontalLayout_3.addWidget(self.filter_lastname)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_3)
 
-        self.button_search = QPushButton(self.groupBox_2)
-        self.button_search.setObjectName(u"button_search")
+        self.button_filter = QPushButton(self.groupBox_2)
+        self.button_filter.setObjectName(u"button_filter")
 
-        self.verticalLayout.addWidget(self.button_search)
+        self.verticalLayout.addWidget(self.button_filter)
 
 
         self.verticalLayout_3.addWidget(self.groupBox_2)
@@ -207,10 +207,10 @@ class Ui_MainWindow(object):
         QWidget.setTabOrder(self.line_information, self.button_add)
         QWidget.setTabOrder(self.button_add, self.button_update)
         QWidget.setTabOrder(self.button_update, self.button_delete)
-        QWidget.setTabOrder(self.button_delete, self.search_firstname)
-        QWidget.setTabOrder(self.search_firstname, self.search_lastname)
-        QWidget.setTabOrder(self.search_lastname, self.button_search)
-        QWidget.setTabOrder(self.button_search, self.table)
+        QWidget.setTabOrder(self.button_delete, self.filter_firstname)
+        QWidget.setTabOrder(self.filter_firstname, self.filter_lastname)
+        QWidget.setTabOrder(self.filter_lastname, self.button_filter)
+        QWidget.setTabOrder(self.button_filter, self.table)
 
         self.menuBar.addAction(self.menuFile.menuAction())
         self.menuBar.addAction(self.menuSettings.menuAction())
@@ -261,10 +261,10 @@ class Ui_MainWindow(object):
         self.button_add.setText(QCoreApplication.translate("MainWindow", u"Add", None))
         self.button_update.setText(QCoreApplication.translate("MainWindow", u"Update Info", None))
         self.button_delete.setText(QCoreApplication.translate("MainWindow", u"Delete Entry", None))
-        self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"Search", None))
-        self.search_firstname.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search First Name", None))
-        self.search_lastname.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search Last Name", None))
-        self.button_search.setText(QCoreApplication.translate("MainWindow", u"Search", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"Filter", None))
+        self.filter_firstname.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Filter First Name", None))
+        self.filter_lastname.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Filter Last Name", None))
+        self.button_filter.setText(QCoreApplication.translate("MainWindow", u"Filter", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
         self.menuSettings.setTitle(QCoreApplication.translate("MainWindow", u"Settings", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))

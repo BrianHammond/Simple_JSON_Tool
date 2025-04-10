@@ -19,7 +19,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.button_add.clicked.connect(self.add_info) # write to .json
         self.button_update.clicked.connect(self.update_info) # update .json
         self.button_delete.clicked.connect(self.delete_entry)
-        self.button_search.clicked.connect(self.search_entry)
+        self.button_filter.clicked.connect(self.filter_entry)
 
         #menu bar
         self.action_new.triggered.connect(self.new_file) # create a new .json file
@@ -28,7 +28,7 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         self.action_about_qt.triggered.connect(lambda: QApplication.aboutQt())
         self.action_about.triggered.connect(lambda: AboutWindow(dark_mode=self.action_dark_mode.isChecked()).exec())
 
-    def new_file(self): # create a new .json file
+    def new_file(self): # creates a new .json file
         self.filename = QFileDialog.getSaveFileName(self, 'create a new file', '', 'Data File (*.json)',)
         
         if not self.filename[0]:
@@ -188,47 +188,40 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
 
         self.table.resizeColumnsToContents()
 
-    def search_entry(self): # Search Button pressed
-        search_firstname = self.search_firstname.text().strip().lower()
-        search_lastname = self.search_lastname.text().strip().lower()
-
-        if not hasattr(self, 'filename') or not self.filename[0]:
-            QMessageBox.warning(self, "NO FILE LOADED", "Please open or create a file before searching.")
-            return
-
-        filtered_employees = []
-        for employee in self.all_employees:
-            first_name = employee["Name"]["First Name"].lower()
-            last_name = employee["Name"]["Last Name"].lower()
-
-            if not search_firstname and not search_lastname:
-                filtered_employees.append(employee)
-            elif search_firstname and not search_lastname:
-                if search_firstname in first_name:
-                    filtered_employees.append(employee)
-            elif search_lastname and not search_firstname:
-                if search_lastname in last_name:
-                    filtered_employees.append(employee)
-            elif search_firstname and search_lastname:
-                if search_firstname in first_name and search_lastname in last_name:
-                    filtered_employees.append(employee)
-
+    def filter_entry(self): # Filter Button pressed
+        # Get filter values from the QLineEdit fields
+        filter_fname = self.filter_firstname.text().strip().lower()
+        filter_lname = self.filter_lastname.text().strip().lower()
+        
+        # Clear current table display
         self.table.setRowCount(0)
-
-        for row, employee in enumerate(filtered_employees):
-            self.populate_table(
-                row,
-                employee["Timestamp"],
-                employee["Name"]["First Name"],
-                employee["Name"]["Middle Name"],
-                employee["Name"]["Last Name"],
-                employee["Age"],
-                employee["Title"],
-                employee["Address"]["Address 1"],
-                employee["Address"]["Address 2"],
-                employee["Address"]["Country"],
-                employee["Misc"][0]
-            )
+        
+        # Iterate through all employees and only show those matching the filter
+        row = 0
+        for employee in self.all_employees:
+            # Use lowercase only for comparison
+            first_name_lower = employee['Name']['First Name'].lower()
+            last_name_lower = employee['Name']['Last Name'].lower()
+            
+            # Check if employee matches filter criteria
+            matches_fname = filter_fname == "" or filter_fname in first_name_lower
+            matches_lname = filter_lname == "" or filter_lname in last_name_lower
+            
+            # If employee matches both filters, add to table with original case
+            if matches_fname and matches_lname:
+                timestamp = employee["Timestamp"]
+                first_name = employee['Name']['First Name']  # Original case
+                middle_name = employee['Name']['Middle Name']
+                last_name = employee['Name']['Last Name']    # Original case
+                age = employee['Age']
+                title = employee['Title']
+                address1 = employee['Address']['Address 1']
+                address2 = employee['Address']['Address 2']
+                country = employee['Address']['Country']
+                additional = employee['Misc'][0]
+                
+                self.populate_table(row, timestamp, first_name, middle_name, last_name, age, title, address1, address2, country, additional)
+                row += 1
 
     def delete_entry(self): # Delete Button pressed
         # Get the selected row in the table
@@ -249,14 +242,17 @@ class MainWindow(QMainWindow, main_ui): # used to display the main user interfac
         if confirm == QMessageBox.No:
             return
 
-        # Remove the entry from the JSON file
+        # Remove the entry from the JSON file and update self.all_employees
         try:
             with open(self.filename[0], "r+") as file:
                 file_content = json.load(file)
 
                 # Find the employee with the same timestamp and remove it
                 file_content["Employees"] = [employee for employee in file_content["Employees"] 
-                                            if employee["Timestamp"] != timestamp]
+                                        if employee["Timestamp"] != timestamp]
+                
+                # Update self.all_employees to match the file content
+                self.all_employees = file_content["Employees"].copy()  # Use copy() to avoid reference issues
                 
                 # Overwrite the file with the updated data
                 file.seek(0)
